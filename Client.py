@@ -5,7 +5,7 @@ import threading
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = "127.0.0.1"
 port = 5008
-user = input(f"Please input a username")
+user = input(f"Please input a username: ")
 connect_message = f"{user} has connected to the server"
 
 # establish connection to server
@@ -23,13 +23,14 @@ def send_messages():
 def receive_message():
     while True:
         server_message = client.recv(1024).decode()
-        print(server_message)
+        print(f"{server_message}")
 
 #create and run threads
-threads = [threading.Thread(send_messages()), threading.Thread(receive_message())]
+sender_thread = threading.Thread(send_messages())
+receiver_thread = threading.Thread(receive_message())
 
-for i in threads:
-    i.start()
+receiver_thread.start()
+sender_thread.start()
 
 # Close connection with server
 # client.close()
